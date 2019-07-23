@@ -168,16 +168,17 @@ const PostMessageIntentHandler = {
 	},
 	async handle(handlerInput) {
 		try {
-			const {
-				accessToken,
-			} = handlerInput.requestEnvelope.context.System.user;
+
+			const userID = handlerInput.requestEnvelope.context.System.user.userId;
+			const serverData = await dbHelper.readData(userID, 'current_server');
 
 			const message = handlerInput.requestEnvelope.request.intent.slots.messagepost.value;
 			const channelNameData = helperFunctions.getStaticAndDynamicSlotValuesFromSlot(handlerInput.requestEnvelope.request.intent.slots.messagechannel);
 			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
 
-			const headers = await helperFunctions.login(accessToken);
-			const speechText = await helperFunctions.postMessage(channelName, message, headers);
+			const { headers } = serverData;
+			const { serverurl } = serverData;
+			const speechText = await helperFunctions.postMessage(channelName, message, headers, serverurl);
 
 
 			if (supportsAPL(handlerInput)) {

@@ -1,6 +1,8 @@
 const axios = require('axios');
 const apiEndpoints = require('./apiEndpoints');
 const envVariables = require('./config');
+const removeWhitespace = require('remove-whitespace');
+
 
 const Jargon = require('@jargon/alexa-skill-sdk');
 const {
@@ -44,10 +46,10 @@ const getData = async (code) =>
 
 
 
-const postMessage = async (channelName, message, headers) =>
+const postMessage = async (channelName, message, headers, serverurl) =>
 	await axios
 		.post(
-			apiEndpoints.postmessageurl, {
+			`${ serverurl }${ apiEndpoints.postmessageurl }`, {
 				channel: `#${ channelName }`,
 				text: message,
 			}, {
@@ -63,7 +65,7 @@ const postMessage = async (channelName, message, headers) =>
 			}
 		})
 		.catch((err) => {
-			console.log(err.message);
+			console.log('ERROR', err.message);
 			if (err.response.status === 401) {
 				return ri('POST_MESSAGE.AUTH_ERROR');
 			} else {
@@ -71,9 +73,57 @@ const postMessage = async (channelName, message, headers) =>
 			}
 		});
 
+function getStaticAndDynamicSlotValuesFromSlot(slot) {
+
+	const result = {
+		name: slot.name,
+		value: slot.value,
+	};
+
+	if (((slot.resolutions || {}).resolutionsPerAuthority || [])[0] || {}) {
+		slot.resolutions.resolutionsPerAuthority.forEach((authority) => {
+			const slotValue = {
+				authority: authority.authority,
+				statusCode: authority.status.code,
+				synonym: slot.value || undefined,
+				resolvedValues: slot.value,
+			};
+			if (authority.values && authority.values.length > 0) {
+				slotValue.resolvedValues = [];
+
+				authority.values.forEach((value) => {
+					slotValue.resolvedValues.push(value);
+				});
+
+			}
+
+			if (authority.authority.includes('amzn1.er-authority.echo-sdk.dynamic')) {
+				result.dynamic = slotValue;
+			} else {
+				result.static = slotValue;
+			}
+		});
+	}
+
+	if (result.hasOwnProperty('dynamic') && result.dynamic.statusCode === 'ER_SUCCESS_MATCH') {
+		return result.dynamic.resolvedValues[0].value.name;
+	} else if (result.hasOwnProperty('static') && result.static.statusCode === 'ER_SUCCESS_MATCH') {
+		return result.static.resolvedValues[0].value.name;
+	} else {
+		return result.value;
+	}
+}
+
+function replaceWhitespacesFunc(str) {
+	return removeWhitespace(str);
+}
+
+
 
 // Module Export of Functions
 
 
 module.exports.postMessage = postMessage;
 module.exports.getData = getData;
+module.exports.getStaticAndDynamicSlotValuesFromSlot = getStaticAndDynamicSlotValuesFromSlot;
+module.exports.replaceWhitespacesFunc = replaceWhitespacesFunc;
