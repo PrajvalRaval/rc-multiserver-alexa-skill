@@ -49,6 +49,30 @@
                         "send message",
                         "send {messagepost} to {messagechannel}"
                     ]
+                },
+                {
+                    "name": "AddServerIntent",
+                    "slots": [
+                        {
+                            "name": "pincode",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "add server {pincode}"
+                    ]
+                },
+                {
+                    "name": "SwitchServerIntent",
+                    "slots": [
+                        {
+                            "name": "servername",
+                            "type": "AMAZON.SearchQuery"
+                        }
+                    ],
+                    "samples": [
+                        "switch server {servername}"
+                    ]
                 }
             ],
             "types": [

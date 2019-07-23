@@ -27,12 +27,28 @@ const LaunchRequestHandler = {
 	},
 	async handle(handlerInput) {
 
-		const speechText = ri('WELCOME.NO_SERVER_FOUND');
+		const userID = handlerInput.requestEnvelope.context.System.user.userId;
+		const checkdata = await dbHelper.isValid(userID, 'current_server');
 
-		return handlerInput.jrb
-			.speak(speechText)
-			.reprompt(speechText)
-			.getResponse();
+		if (checkdata === true) {
+
+			const speechText = ri('WELCOME.SUCCESS');
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.getResponse();
+
+		} else {
+
+			const speechText = ri('WELCOME.NO_SERVER_FOUND');
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.getResponse();
+
+		}
 
 	},
 };
@@ -55,7 +71,7 @@ const AddServerIntentHandler = {
 			const { servername } = data;
 			const udata = data.userdata;
 
-			const checkdata = await dbHelper.isValid(userID, servername);
+			const checkdata = await dbHelper.isValid(userID, 'current_server');
 
 			if (checkdata === true) {
 
@@ -246,6 +262,44 @@ const PostMessageIntentHandler = {
 	},
 };
 
+const SwitchServerIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'SwitchServerIntent';
+	},
+	async handle(handlerInput) {
+
+		const userID = handlerInput.requestEnvelope.context.System.user.userId;
+		const servername = handlerInput.requestEnvelope.request.intent.slots.servername.value;
+
+		const checkserver = await dbHelper.isValid(userID, servername);
+
+		if (checkserver === false) {
+
+			const speechText = ri('SERVER.SWAP_ERROR');
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.getResponse();
+
+		} else {
+
+			const serverdata = await dbHelper.getAllServerData(userID, servername);
+			const udata = serverdata.Item.data;
+			await dbHelper.postData('current_server', userID, udata);
+
+			const speechText = ri('SERVER.SWAP_SUCCESS');
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.getResponse();
+
+		}
+	},
+};
+
 const HelpIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -323,6 +377,7 @@ exports.handler = skillBuilder
 		InProgressPostMessageIntentHandler,
 		DeniedPostMessageIntentHandler,
 		PostMessageIntentHandler,
+		SwitchServerIntentHandler,
 		HelpIntentHandler,
 		CancelAndStopIntentHandler,
 		SessionEndedRequestHandler

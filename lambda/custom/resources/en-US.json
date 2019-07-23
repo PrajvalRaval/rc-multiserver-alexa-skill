@@ -4,7 +4,7 @@
         "v2": "Sorry, I didn't get that. Could you say it again?."
     },
     "HELP": {
-        "MESSAGE": "This is the Alexa Skill for rocket chat. Refer sample utterances file on GitHub.",
+        "MESSAGE": "This is the Alexa Skill for rocket chat. If you do not have the code, please go to Rocket Chat web client , and click on your avatar at the top left and select My Account. Then register with Alexa to get the six digits code.",
         "CARD_TITLE": "Rocket.Chat Help"
     },
     "GOODBYE": {
@@ -13,7 +13,7 @@
     },
     "WELCOME": {
         "SUCCESS": "Welcome To Rocket Chat Alexa Skill. What Would you like to do today?",
-        "NO_SERVER_FOUND": "Welcome To Rocket Chat Alexa Skill. If you have registration code , please say : Add Server .",
+        "NO_SERVER_FOUND": "Welcome To Rocket Chat Alexa Skill. Currently, You don't have any registered server on this skill. Please say , Add Server Pincode, if you have a pincode , or , Help If you want to know how to generate one. ",
         "SUCCESS_RETURN_USER": "Welcome back! What Would you like to do today?",
         "CARD_TITLE": "Welcome To Rocket.Chat",
         "ERROR": "To start using this skill, please use the companion app to authenticate."
@@ -27,8 +27,8 @@
     },
     "SERVER": {
         "SUCCESS": "Server Added Successfully",
-        "ERROR": "Wrong Code",
-        "DATA_EXISTS": "Data Exists",
-        "DATA_NOT_EXISTS": "Data does not exist"
+        "ERROR": "Sorry I cannot find any server related to this pincode",
+        "SWAP_SUCCESS": "Server Switched Successfully",
+        "SWAP_ERROR": "Cannot Find Given Server Name"
     }
 }

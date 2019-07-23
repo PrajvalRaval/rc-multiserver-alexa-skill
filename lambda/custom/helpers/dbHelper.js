@@ -1,4 +1,3 @@
-
 const AWS = require('aws-sdk');
 AWS.config.update({
 	region: 'us-east-1',
@@ -20,8 +19,7 @@ module.exports = {
 			TableName: tableName,
 			Item: {
 				server: servername,
-				// eslint-disable-next-line object-shorthand
-				userID: userID,
+				userID,
 				data: udata,
 			},
 		};
@@ -77,7 +75,23 @@ module.exports = {
 
 	},
 
+	async getAllServerData(userID, servername) {
+
+		const params = {
+			TableName: tableName,
+			Key: {
+				userID,
+				server: servername,
+			},
+		};
+
+		const result = await docClient.get(params).promise();
+		console.log('ALL SERVER DATA', result);
+
+		return result;
+
+	},
+
 
 
 };
-
