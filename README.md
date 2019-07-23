@@ -1,1 +1,1 @@
-# rc-multiserver-alexa-skill
+# Rocket Chat Multi Server Skill
