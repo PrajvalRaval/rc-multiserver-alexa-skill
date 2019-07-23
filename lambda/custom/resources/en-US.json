@@ -1,0 +1,34 @@
+{
+    "ERRORS": {
+        "v1": "Sorry, I can't understand the command. Please say again.",
+        "v2": "Sorry, I didn't get that. Could you say it again?."
+    },
+    "HELP": {
+        "MESSAGE": "This is the Alexa Skill for rocket chat. Refer sample utterances file on GitHub.",
+        "CARD_TITLE": "Rocket.Chat Help"
+    },
+    "GOODBYE": {
+        "MESSAGE": "Thanks for using Rocket Chat.",
+        "CARD_TITLE": "Goodbye!"
+    },
+    "WELCOME": {
+        "SUCCESS": "Welcome To Rocket Chat Alexa Skill. What Would you like to do today?",
+        "NO_SERVER_FOUND": "Welcome To Rocket Chat Alexa Skill. If you have registration code , please say : Add Server .",
+        "SUCCESS_RETURN_USER": "Welcome back! What Would you like to do today?",
+        "CARD_TITLE": "Welcome To Rocket.Chat",
+        "ERROR": "To start using this skill, please use the companion app to authenticate."
+    },
+    "POST_MESSAGE": {
+        "SUCCESS": "I've sent your message.",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
+        "CARD_TITLE": "Post A Message",
+        "ERROR": "Sorry, I couldn't send your message right now.",
+        "DENIED": "Okay, let's try again."
+    },
+    "SERVER": {
+        "SUCCESS": "Server Added Successfully",
+        "ERROR": "Wrong Code",
+        "DATA_EXISTS": "Data Exists",
+        "DATA_NOT_EXISTS": "Data does not exist"
+    }
+}
