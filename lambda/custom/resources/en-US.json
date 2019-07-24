@@ -30,5 +30,12 @@
         "ERROR": "Sorry I cannot find any server related to this pincode",
         "SWAP_SUCCESS": "Server Switched Successfully",
         "SWAP_ERROR": "Sorry I cannot find server {servername}. Please Try again with different servername."
+    },
+    "GET_LAST_MESSAGE_FROM_CHANNEL": {
+        "SUCCESS": "{name} says, {message}.",
+        "CARD_TITLE": "Channel Last Message",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
+        "ERROR": "Sorry, I couldn't find the channel {channelName} right now.",
+        "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name."
     }
 }

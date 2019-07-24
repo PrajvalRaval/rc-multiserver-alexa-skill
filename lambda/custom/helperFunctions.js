@@ -118,7 +118,76 @@ function replaceWhitespacesFunc(str) {
 	return removeWhitespace(str);
 }
 
+const getLastMessageType = async (channelName, headers, serverurl) =>
+	await axios
+		.get(`${ serverurl }${ apiEndpoints.channelmessageurl }${ channelName }`, {
+			headers,
+		})
+		.then((res) => res.data)
+		.then((res) => {
+			if (!res.messages[0].file) {
+				return 'textmessage';
+			} else {
+				return res.messages[0].file.type;
+			}
+		})
+		.catch((err) => {
+			console.log(err.message);
+		});
 
+const channelLastMessage = async (channelName, headers, serverurl) =>
+	await axios
+		.get(`${ serverurl }${ apiEndpoints.channelmessageurl }${ channelName }`, {
+			headers,
+		})
+		.then((res) => res.data)
+		.then((res) => {
+			if (res.success === true) {
+				return ri('GET_LAST_MESSAGE_FROM_CHANNEL.SUCCESS', {
+					name: res.messages[0].u.username,
+					message: res.messages[0].msg,
+				});
+			} else {
+				return ri('GET_LAST_MESSAGE_FROM_CHANNEL.ERROR', {
+					channelName,
+				});
+			}
+		})
+		.catch((err) => {
+			console.log(err.message);
+			if (err.response.data.errorType === 'error-room-not-found') {
+				return ri('GET_LAST_MESSAGE_FROM_CHANNEL.ERROR_NOT_FOUND', {
+					channelName,
+				});
+			} else if (err.response.status === 401) {
+				return ri('GET_LAST_MESSAGE_FROM_CHANNEL.AUTH_ERROR');
+			} else {
+				return ri('GET_LAST_MESSAGE_FROM_CHANNEL.ERROR', {
+					channelName,
+				});
+			}
+		});
+
+const getLastMessageFileURL = async (channelName, headers, serverurl) =>
+	await axios
+		.get(`${ serverurl }${ apiEndpoints.channelmessageurl }${ channelName }`, {
+			headers,
+		})
+		.then((res) => res.data)
+		.then((res) => `https://bots.rocket.chat/file-upload/${ res.messages[0].file._id }/${ res.messages[0].file.name }`)
+		.catch((err) => {
+			console.log(err.message);
+		});
+
+const getLastMessageFileDowloadURL = async (fileurl, headers) =>
+	await axios
+		.get(fileurl, {
+			headers,
+		})
+		.then((response) => `${ response.request.res.responseUrl }`)
+		.catch((err) => {
+			console.log(err.message);
+		});
 
 // Module Export of Functions
 
@@ -127,3 +196,7 @@ module.exports.postMessage = postMessage;
 module.exports.getData = getData;
 module.exports.getStaticAndDynamicSlotValuesFromSlot = getStaticAndDynamicSlotValuesFromSlot;
 module.exports.replaceWhitespacesFunc = replaceWhitespacesFunc;
+module.exports.getLastMessageType = getLastMessageType;
+module.exports.channelLastMessage = channelLastMessage;
+module.exports.getLastMessageFileURL = getLastMessageFileURL;
+module.exports.getLastMessageFileDowloadURL = getLastMessageFileDowloadURL;

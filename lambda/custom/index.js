@@ -187,13 +187,13 @@ const PostMessageIntentHandler = {
 
 			const userID = handlerInput.requestEnvelope.context.System.user.userId;
 			const serverData = await dbHelper.readData(userID, 'current_server');
+			const { headers } = serverData;
+			const { serverurl } = serverData;
 
 			const message = handlerInput.requestEnvelope.request.intent.slots.messagepost.value;
 			const channelNameData = helperFunctions.getStaticAndDynamicSlotValuesFromSlot(handlerInput.requestEnvelope.request.intent.slots.messagechannel);
 			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
 
-			const { headers } = serverData;
-			const { serverurl } = serverData;
 			const speechText = await helperFunctions.postMessage(channelName, message, headers, serverurl);
 
 
@@ -302,6 +302,255 @@ const SwitchServerIntentHandler = {
 	},
 };
 
+const GetLastMessageFromChannelIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'GetLastMessageFromChannelIntent';
+	},
+	async handle(handlerInput) {
+		try {
+			const userID = handlerInput.requestEnvelope.context.System.user.userId;
+			const serverData = await dbHelper.readData(userID, 'current_server');
+			const { headers } = serverData;
+			const { serverurl } = serverData;
+
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.getmessagechannelname.value;
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+
+			const messageType = await helperFunctions.getLastMessageType(channelName, headers, serverurl);
+
+			if (supportsAPL(handlerInput)) {
+
+				if (messageType === 'textmessage') {
+
+					const speechText = await helperFunctions.channelLastMessage(channelName, headers, serverurl);
+
+					return handlerInput.jrb
+						.speak(speechText)
+						.reprompt(speechText)
+						.addDirective({
+							type: 'Alexa.Presentation.APL.RenderDocument',
+							version: '1.0',
+							document: layouts.lastMessageLayout,
+							datasources: {
+
+								lastMessageData: {
+									type: 'object',
+									objectId: 'rcPostMessage',
+									backgroundImage: {
+										contentDescription: null,
+										smallSourceUrl: null,
+										largeSourceUrl: null,
+										sources: [
+											{
+												url: 'https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png',
+												size: 'small',
+												widthPixels: 0,
+												heightPixels: 0,
+											},
+											{
+												url: 'https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png',
+												size: 'large',
+												widthPixels: 0,
+												heightPixels: 0,
+											},
+										],
+									},
+									textContent: {
+										username: {
+											type: 'PlainText',
+											text: speechText.params.name,
+										},
+										message: {
+											type: 'PlainText',
+											text: speechText.params.message,
+										},
+									},
+									logoUrl: 'https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png',
+								},
+							},
+						})
+						.getResponse();
+
+				} else if (messageType.includes('image')) {
+
+					const fileurl = await helperFunctions.getLastMessageFileURL(channelName, headers, serverurl);
+					const download = await helperFunctions.getLastMessageFileDowloadURL(fileurl, headers);
+					const messageData = await helperFunctions.channelLastMessage(channelName, headers, serverurl);
+					const speechText = `${ messageData.params.name } sent you an image message.`;
+
+
+					return handlerInput.responseBuilder
+						.speak(speechText)
+						.reprompt(speechText)
+						.addDirective({
+							type: 'Alexa.Presentation.APL.RenderDocument',
+							version: '1.0',
+							document: layouts.lastMessageImageLayout,
+							datasources: {
+
+								lastMessageData: {
+									type: 'object',
+									objectId: 'rcLastImageMessage',
+									backgroundImage: {
+										sources: [
+											{
+												url: 'https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png',
+												size: 'small',
+												widthPixels: 0,
+												heightPixels: 0,
+											},
+											{
+												url: 'https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png',
+												size: 'large',
+												widthPixels: 0,
+												heightPixels: 0,
+											},
+										],
+									},
+									messageContent: {
+										image: {
+											url: download,
+										},
+										username: {
+											type: 'PlainText',
+											text: messageData.params.name,
+										},
+									},
+									logoUrl: 'https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png',
+								},
+							},
+						})
+						.getResponse();
+
+				} else if (messageType.includes('video')) {
+
+					const fileurl = await helperFunctions.getLastMessageFileURL(channelName, headers, serverurl);
+					const download = await helperFunctions.getLastMessageFileDowloadURL(fileurl, headers);
+					const speechText = await helperFunctions.channelLastMessage(channelName, headers, serverurl);
+
+
+					return handlerInput.jrb
+						.speak(speechText)
+						.reprompt(speechText)
+						.addDirective({
+							type: 'Alexa.Presentation.APL.RenderDocument',
+							version: '1.0',
+							document: layouts.lastMessageVideoLayout,
+							datasources: {
+
+								lastMessageData: {
+									type: 'object',
+									objectId: 'rcLastVideoMessage',
+									backgroundImage: {
+										sources: [
+											{
+												url: 'https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png',
+												size: 'small',
+												widthPixels: 0,
+												heightPixels: 0,
+											},
+											{
+												url: 'https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png',
+												size: 'large',
+												widthPixels: 0,
+												heightPixels: 0,
+											},
+										],
+									},
+									messageContent: {
+										video: {
+											url: download,
+										},
+										username: {
+											type: 'PlainText',
+											text: speechText.params.name,
+										},
+									},
+									logoUrl: 'https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png',
+								},
+							},
+						})
+						.getResponse();
+
+				} else {
+
+					const speechText = 'Sorry. This message contains file types, which cannot be accessed on this device.';
+
+					return handlerInput.responseBuilder
+						.speak(speechText)
+						.reprompt(speechText)
+						.addDirective({
+							type: 'Alexa.Presentation.APL.RenderDocument',
+							version: '1.0',
+							document: layouts.lastMessageNotSupported,
+							datasources: {
+
+								LastMessageNotSupportedData: {
+									type: 'object',
+									objectId: 'rcnotsupported',
+									backgroundImage: {
+										sources: [
+											{
+												url: 'https://user-images.githubusercontent.com/41849970/60644955-126c3180-9e55-11e9-9147-7820655f3c0b.png',
+												size: 'small',
+												widthPixels: 0,
+												heightPixels: 0,
+											},
+											{
+												url: 'https://user-images.githubusercontent.com/41849970/60644955-126c3180-9e55-11e9-9147-7820655f3c0b.png',
+												size: 'large',
+												widthPixels: 0,
+												heightPixels: 0,
+											},
+										],
+									},
+									textContent: {
+										primaryText: {
+											type: 'PlainText',
+											text: 'It’s a trap!',
+										},
+										secondaryText: {
+											type: 'PlainText',
+											text: 'Message contains file types which cannot be accessed on this device.',
+										},
+									},
+									logoUrl: 'https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png',
+								},
+							},
+						})
+						.getResponse();
+				}
+
+			} else if (messageType === 'textmessage') {
+
+				const speechText = await helperFunctions.channelLastMessage(channelName, headers, serverurl);
+
+				return handlerInput.jrb
+					.speak(speechText)
+					.reprompt(speechText)
+					.withSimpleCard(ri('GET_LAST_MESSAGE_FROM_CHANNEL.CARD_TITLE'), speechText)
+					.getResponse();
+
+			} else {
+
+				const speechText = 'Sorry. This message contains file types, which cannot be accessed on this device.';
+
+				return handlerInput.responseBuilder
+					.speak(speechText)
+					.reprompt(speechText)
+					.withSimpleCard('Its a Trap!', speechText)
+					.getResponse();
+
+			}
+
+		} catch (error) {
+			console.error(error);
+		}
+	},
+};
+
+
 const HelpIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -380,6 +629,7 @@ exports.handler = skillBuilder
 		DeniedPostMessageIntentHandler,
 		PostMessageIntentHandler,
 		SwitchServerIntentHandler,
+		GetLastMessageFromChannelIntentHandler,
 		HelpIntentHandler,
 		CancelAndStopIntentHandler,
 		SessionEndedRequestHandler
