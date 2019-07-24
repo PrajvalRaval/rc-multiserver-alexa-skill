@@ -24,7 +24,7 @@
 
 1. After deploying skill, goto [DynamoDB](https://console.aws.amazon.com/dynamodb/home?region=us-east-1) and click on Create Table
 
-2. Give A Table name. For Primary Key use 'userID'.
+2. Give A Table name. For Primary Key use 'userID' as key name.
 
 3. Click on Add sort key, and give 'server' as key name.
 
