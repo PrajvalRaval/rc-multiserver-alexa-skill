@@ -13,14 +13,14 @@
     },
     "WELCOME": {
         "SUCCESS": "Welcome To Rocket Chat Alexa Skill. What Would you like to do today?",
-        "NO_SERVER_FOUND": "Welcome To Rocket Chat Alexa Skill. Currently, You don't have any registered server on this skill. Please say , Add Server Pincode, if you have a pincode , or , Help If you want to know how to generate one. ",
+        "NO_SERVER_FOUND": "Welcome To Rocket Chat Alexa Skill. Currently, You don't have any registered server on this skill. Please say , Add Server , if you have a pincode , or , Help If you want to know how to generate one. ",
         "SUCCESS_RETURN_USER": "Welcome back! What Would you like to do today?",
         "CARD_TITLE": "Welcome To Rocket.Chat",
         "ERROR": "To start using this skill, please use the companion app to authenticate."
     },
     "POST_MESSAGE": {
         "SUCCESS": "I've sent your message.",
-        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
+        "AUTH_ERROR": "Sorry Incorrect User Credentials. Please Check your provided UserID and AuthToken ",
         "CARD_TITLE": "Post A Message",
         "ERROR": "Sorry, I couldn't send your message right now.",
         "DENIED": "Okay, let's try again."
@@ -29,6 +29,6 @@
         "SUCCESS": "Server Added Successfully",
         "ERROR": "Sorry I cannot find any server related to this pincode",
         "SWAP_SUCCESS": "Server Switched Successfully",
-        "SWAP_ERROR": "Cannot Find Given Server Name"
+        "SWAP_ERROR": "Sorry I cannot find server {servername}. Please Try again with different servername."
     }
 }

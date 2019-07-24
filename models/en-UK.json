@@ -55,10 +55,15 @@
                     "slots": [
                         {
                             "name": "pincode",
-                            "type": "AMAZON.NUMBER"
+                            "type": "AMAZON.NUMBER",
+                            "samples": [
+                                "{pincode}"
+                            ]
                         }
                     ],
                     "samples": [
+                        "add server pincode",
+                        "add server",
                         "add server {pincode}"
                     ]
                 },
@@ -67,10 +72,14 @@
                     "slots": [
                         {
                             "name": "servername",
-                            "type": "AMAZON.SearchQuery"
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "{servername}"
+                            ]
                         }
                     ],
                     "samples": [
+                        "switch server",
                         "switch server {servername}"
                     ]
                 }
@@ -542,6 +551,40 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "AddServerIntent",
+                    "delegationStrategy": "ALWAYS",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "pincode",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.836061062201.930490133078"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "SwitchServerIntent",
+                    "delegationStrategy": "ALWAYS",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "servername",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.924693088143.19994595824"
+                            }
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -634,6 +677,24 @@
                     {
                         "type": "PlainText",
                         "value": "Which channel's last message do you want to hear?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.836061062201.930490133078",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Please Tell Me Your Pincode ?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.924693088143.19994595824",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Please Tell Me The Servername of the server you want to switch to ?"
                     }
                 ]
             }

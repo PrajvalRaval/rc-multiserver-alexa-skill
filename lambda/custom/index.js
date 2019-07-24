@@ -276,7 +276,9 @@ const SwitchServerIntentHandler = {
 
 		if (checkserver === false) {
 
-			const speechText = ri('SERVER.SWAP_ERROR');
+			const speechText = ri('SERVER.SWAP_ERROR', {
+				servername,
+			});
 
 			return handlerInput.jrb
 				.speak(speechText)
