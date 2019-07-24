@@ -3,7 +3,7 @@
         "publishingInformation": {
             "locales": {
                 "en-US": {
-                    "summary": "Alexa Skill For Rocket.Chat",
+                    "summary": "Multi Server Alexa Skill For Rocket.Chat",
                     "examplePhrases": [
                         "Alexa, Open Rocketchat",
                         "Alexa, Begin Rocketchat",
@@ -11,38 +11,8 @@
                     ],
                     "name": "Rocket.Chat",
                     "description": "Sample Full Description"
-                },
-                "it-IT": {
-                    "summary": "Alexa Skill per Rocket.Chat",
-                    "examplePhrases": [
-                        "Alexa, Apri Rocketchat",
-                        "Alexa, Avvia Rocketchat",
-                        "Alexa, Lancia Rocketchat"
-                    ],
-                    "name": "Rocket.Chat",
-                    "description": "Esempio di descrizione completa."
                 },
                 "en-IN": {
-                    "summary": "Alexa Skill For Rocket.Chat",
-                    "examplePhrases": [
-                        "Alexa, Open Rocketchat",
-                        "Alexa, Begin Rocketchat",
-                        "Alexa, Launch Rocketchat"
-                    ],
-                    "name": "Rocket.Chat",
-                    "description": "Sample Full Description"
-                },
-                "en-CA": {
-                    "summary": "Alexa Skill For Rocket.Chat",
-                    "examplePhrases": [
-                        "Alexa, Open Rocketchat",
-                        "Alexa, Begin Rocketchat",
-                        "Alexa, Launch Rocketchat"
-                    ],
-                    "name": "Rocket.Chat",
-                    "description": "Sample Full Description"
-                },
-                "en-AU": {
                     "summary": "Alexa Skill For Rocket.Chat",
                     "examplePhrases": [
                         "Alexa, Open Rocketchat",
@@ -61,76 +31,6 @@
                     ],
                     "name": "Rocket.Chat",
                     "description": "Sample Full Description"
-                },
-                "fr-CA": {
-                    "summary": "Alexa Skill For Rocket.Chat",
-                    "examplePhrases": [
-                        "Alexa, Open Rocketchat",
-                        "Alexa, Begin Rocketchat",
-                        "Alexa, Launch Rocketchat"
-                    ],
-                    "name": "Rocket.Chat",
-                    "description": "Description complète de l'échantillon"
-                },
-                "fr-FR": {
-                    "summary": "Alexa Skill For Rocket.Chat",
-                    "examplePhrases": [
-                        "Alexa, Ouvrir Rocketchat",
-                        "Alexa, Commencer Rocketchat",
-                        "Alexa, Lancement Rocketchat"
-                    ],
-                    "name": "Rocket.Chat",
-                    "description": "Description complète de l'échantillon"
-                },
-                "de-DE": {
-                    "summary": "Alexa Skill For Rocket.Chat",
-                    "examplePhrases": [
-                        "Alexa, Offen Rocketchat",
-                        "Alexa, Start Rocketchat",
-                        "Alexa, Starten Rocketchat"
-                    ],
-                    "name": "Rocket.Chat",
-                    "description": "Probe Vollständige Beschreibung"
-                },
-                "es-ES": {
-                    "summary": "Alexa Skill For Rocket.Chat",
-                    "examplePhrases": [
-                        "Alexa, Abierto Rocketchat",
-                        "Alexa, Empezar Rocketchat",
-                        "Alexa, Lanzamiento Rocketchat"
-                    ],
-                    "name": "Rocket.Chat",
-                    "description": "Muestra Descripción Completa"
-                },
-                "es-MX": {
-                    "summary": "Alexa Skill For Rocket.Chat",
-                    "examplePhrases": [
-                        "Alexa, Abierto Rocketchat",
-                        "Alexa, Empezar Rocketchat",
-                        "Alexa, Lanzamiento Rocketchat"
-                    ],
-                    "name": "Rocket.Chat",
-                    "description": "Muestra Descripción Completa"
-                },
-                "es-US": {
-                    "summary": "Alexa Skill For Rocket.Chat",
-                    "examplePhrases": [
-                        "Alexa, Abierto Rocketchat",
-                        "Alexa, Empezar Rocketchat",
-                        "Alexa, Lanzamiento Rocketchat"
-                    ],
-                    "name": "Rocket.Chat",
-                    "description": "Muestra Descripción Completa"
-                },
-                "pt-BR": {
-                    "summary": "Alexa Skill For Rocket.Chat",
-                    "examplePhrases": [
-                        "Alexa, Abrir Rocketchat",
-                        "Alexa, Início Rocketchat",
-                        "Alexa, Lançamento Rocketchat"
-                    ],
-                    "name": "Rocket.Chat",
-                    "description": "Sample Full Description"
                 }
             },
             "isAvailableWorldwide": true,
@@ -142,7 +42,7 @@
             "custom": {
                 "endpoint": {
                     "sourceDir": "lambda/custom",
-                    "uri": "ask-custom-rocket-chat-default"
+                    "uri": "ask-custom-rc-multiserver"
                 },
                 "interfaces": [
                   {
@@ -151,33 +51,6 @@
                 ]
             }
         },
-        "manifestVersion": "1.0",
-        "permissions": [
-            {
-                "name": "alexa::devices:all:notifications:write"
-            }
-        ],
-        "events": {
-            "publications": [
-                {
-                    "eventName": "AMAZON.MessageAlert.Activated"
-                }
-            ],
-            "endpoint": {
-                "uri": "your-arn-here"
-            },
-            "subscriptions": [
-                {
-                    "eventName": "SKILL_PROACTIVE_SUBSCRIPTION_CHANGED"
-                }
-            ],
-            "regions": {
-                "NA": {
-                    "endpoint": {
-                        "uri": "your-arn-here"
-                    }
-                }
-            }
-        }
+        "manifestVersion": "1.0"
     }
 }
